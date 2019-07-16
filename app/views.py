@@ -5,7 +5,7 @@ from flask import Flask
 
 from functools import wraps
 
-from app import app
+from app import app, mail
 import pymysql.cursors
 import hashlib
 import os, sys, stat
@@ -13,6 +13,11 @@ from werkzeug.utils import secure_filename
 import uuid
 import time
 import pyrebase
+from flask_mail import Message
+
+mail.init_app(app)
+
+
 
 config = {
     "apiKey": "AIzaSyCXxaSbDZVg4_RW1pgntREbjbPfj15OQ8I",
@@ -44,6 +49,11 @@ def get_fname():
     user = db.child("users").child(make_unique_id(email)).get().val()
     session['first_name'] = user["name"].split()[0]
     return session['first_name']
+
+@app.route('/searches')
+@app.route('/searches/')
+def searches():
+    return render_template("searches.html", title='Searches', isAuthenticated=authenticated(), fname=get_fname())
 
 
 #Routes Index Page
@@ -130,6 +140,11 @@ def registerAuth():
     except Exception as err:
         return render_template('register.html', error=err)
     session['username'] = email
+
+    msg = Message(subject='Thank you for signing up for Shoppinator', recipients=[email], body = 'Welcome to Shoppinator, ' + fname )
+
+    mail.send(msg)
+
     return redirect(url_for('home'))
 
 
@@ -158,7 +173,7 @@ def changeAccountInfo():
 
     return redirect(url_for('home'))
 
-@app.route('/home')
+@app.route('/search')
 @login_required
 def home():
     uname = session['username']
@@ -180,7 +195,7 @@ def home():
 #                value["id"]=key
 #                del value["comments"]["placeholder"]
 #                posts.append(value)
-        return render_template('home.html', username=uname, posts=posts, fname=get_fname())
+        return render_template('search.html', username=uname, posts=posts, fname=get_fname())
 
 
 #Logging out

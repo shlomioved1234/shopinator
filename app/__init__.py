@@ -1,13 +1,22 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
+from flask_mail import Mail
 import os
 
 app = Flask(__name__)
 Bootstrap(app)
+mail = Mail()
 
 app.jinja_env.auto_reload = True
 
-app.config.update( SECRET_KEY = 'secret_key' )
+app.config.update( SECRET_KEY = 'secret_key',
+                    MAIL_SERVER = 'smtp.gmail.com',
+                    MAIL_PORT = 587,
+                    MAIL_USE_TLS = True,
+                    MAIL_USE_SSL = False,
+                    MAIL_USERNAME = 'shoppinator1.0@gmail.com',
+                    MAIL_PASSWORD = 'shoppinator123!',
+                    MAIL_DEFAULT_SENDER = 'info@shoppinator.com')
 
 from datetime import datetime
 
