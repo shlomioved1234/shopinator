@@ -1,0 +1,27 @@
+<!-- extend from base layout -->
+<!-- Website About page -->
+{% extends "base.html" %}
+
+{% set nav_active = 'about' %}
+{% set authenticated = isAuthenticated %}
+
+{% block btitle %}
+About
+{% endblock %}
+
+{% block page_content %}
+
+<div class="jumbotron">
+    <h1>About Shoppinator</h1>
+    <br>
+    <p>
+        This is a application created by Shlomo Oved and Yair Masry to give users the best shopping results.
+    </p>
+
+    <p>
+        <strong>Github</strong>: <a href="https://github.com/shlomioved1234/shopinator" target="_blank">https://github.com/shlomioved1234/shopinator</a>
+    </p>
+
+</div>
+
+{% endblock %}
